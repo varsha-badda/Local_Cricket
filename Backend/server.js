@@ -1,14 +1,15 @@
-const express = require("express")
-const connectToDB = require("./config/db")
+const dotenv = require("dotenv");
+dotenv.config();
 
-const app = express()
-connectToDB
+console.log("ENV LOADED"); // 👈 ADD THIS
 
-app.get('/',(req,res)=>{
-    res.send("Hello world!")
-})
+const connectDB = require("./config/db");
+const app = require("./app");
 
+connectDB(); // 👈 must be called
 
-app.listen(4000,()=>{
-    console.log("server is running")
-})
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
