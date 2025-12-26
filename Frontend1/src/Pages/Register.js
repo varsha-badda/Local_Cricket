@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { loginUser } from "../../api/auth.api";
+import { registerUser } from "../../api/auth.api";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
+const Register = () => {
+  const [form, setForm] = useState({ name: "", email: "", password: "" });
   const navigate = useNavigate();
 
   const handleChange = (e) =>
@@ -11,19 +11,15 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await loginUser(form);
-
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("role", res.data.role);
-
-    res.data.role === "manager"
-      ? navigate("/manager")
-      : navigate("/viewer");
+    await registerUser(form);
+    alert("Registered successfully");
+    navigate("/login");
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
+      <h2>Register</h2>
+      <input name="name" placeholder="Name" onChange={handleChange} />
       <input name="email" placeholder="Email" onChange={handleChange} />
       <input
         name="password"
@@ -31,9 +27,9 @@ const Login = () => {
         placeholder="Password"
         onChange={handleChange}
       />
-      <button>Login</button>
+      <button>Register</button>
     </form>
   );
 };
 
-export default Login;
+export default Register;
