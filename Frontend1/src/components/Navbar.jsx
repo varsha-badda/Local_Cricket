@@ -1,29 +1,50 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
   const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  // Hide navbar on splash page
+  if (location.pathname === "/") {
+    return null;
+  }
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
     navigate("/login");
   };
 
   return (
     <nav style={styles.nav}>
-      <h3>Cricket App</h3>
+      <h2 style={styles.logo}>🏏 Cricket App</h2>
 
       <div style={styles.links}>
-        {token ? (
+        {!token && (
           <>
-            <Link to="/players">Players</Link>
-            <Link to="/teams">Teams</Link>
-            <button onClick={handleLogout}>Logout</button>
+            <Link to="/login" style={styles.link}>Login</Link>
+            <Link to="/register" style={styles.link}>Register</Link>
           </>
-        ) : (
+        )}
+
+        {token && (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            {role === "manager" && (
+              <Link to="/manager" style={styles.link}>Manager</Link>
+            )}
+
+            <Link to="/viewer" style={styles.link}>Viewer</Link>
+            <Link to="/players" style={styles.link}>Players</Link>
+
+            {role === "manager" && (
+              <Link to="/players/add" style={styles.link}>Add Player</Link>
+            )}
+
+            <button onClick={handleLogout} style={styles.logout}>
+              Logout
+            </button>
           </>
         )}
       </div>
@@ -35,14 +56,31 @@ const styles = {
   nav: {
     display: "flex",
     justifyContent: "space-between",
-    padding: "10px 20px",
-    background: "#222",
+    alignItems: "center",
+    padding: "12px 24px",
+    backgroundColor: "#0b132b",
     color: "#fff",
+  },
+  logo: {
+    margin: 0,
   },
   links: {
     display: "flex",
     gap: "15px",
     alignItems: "center",
+  },
+  link: {
+    color: "#fff",
+    textDecoration: "none",
+    fontWeight: "500",
+  },
+  logout: {
+    padding: "6px 12px",
+    border: "none",
+    backgroundColor: "#ff4d4d",
+    color: "#fff",
+    cursor: "pointer",
+    borderRadius: "4px",
   },
 };
 

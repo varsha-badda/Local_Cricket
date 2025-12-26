@@ -1,25 +1,25 @@
-function App() {
-  const testBackend = async () => {
-    console.log("Button clicked"); // 👈 frontend test
+import { BrowserRouter, useLocation } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes"
+import Navbar from "./components/Navbar.jsx";
 
-    try {
-      const res = await fetch("http://localhost:4000/");
-      const text = await res.text();
-      alert("Response from backend: " + text);
-    } catch (err) {
-      console.error(err);
-      alert("ERROR: Backend not reachable");
-    }
-  };
+const Layout = () => {
+  const location = useLocation();
+  const hideNavbar = location.pathname === "/";
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Frontend Running</h1>
-      <button onClick={testBackend}>
-        TEST BACKEND CONNECTION
-      </button>
-    </div>
+    <>
+      {!hideNavbar && <Navbar />}
+      <AppRoutes />
+    </>
   );
-}
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <Layout />
+    </BrowserRouter>
+  );
+};
 
 export default App;
