@@ -37,6 +37,9 @@ const AppRoutes = () => {
         }
       />
 
+      <Route path="/register" element={<Register />} />
+
+
       
     </Routes>
   );

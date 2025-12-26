@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { loginUser } from "../../api/auth.api";
 import { useNavigate } from "react-router-dom";
-import { DotLottiePlayer } from '@dotlottie/react-player';
+import { loginUser } from "../../api/auth.api";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -14,56 +13,73 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await loginUser(form);
+
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
 
-      res.data.role === "manager" ? navigate("/manager") : navigate("/viewer");
+      res.data.role === "manager"
+        ? navigate("/manager")
+        : navigate("/viewer");
     } catch (err) {
-      console.error("Login failed", err);
+      alert("Invalid credentials");
     }
   };
 
   return (
-    <div className="min-h-screen w-screen bg-black flex flex-col justify-center items-center font-mono">
-      {/* Cricket Player Animation */}
-      <div className="w-64 h-64 mb-6">
-        <DotLottiePlayer
-          src="cricket-game.json" // Replace with a real Lottie URL
-          autoplay
-          loop
-        />
-      </div>
+    <div className="min-h-screen flex items-center justify-center bg-[#23242a]">
+      {/* Card wrapper */}
+      <div className="relative w-[370px] h-[450px] overflow-hidden rounded-[50px_5px]">
 
-      <form 
-        className="flex flex-col gap-4 w-full max-w-md p-8 border border-green-500/30 rounded-lg shadow-[0_0_15px_rgba(34,197,94,0.2)]"
-        onSubmit={handleSubmit}
-      >
-        <h2 className="text-green-500 text-3xl font-bold mb-6 text-center uppercase tracking-widest">
-          Player Login
-        </h2>
-        
-        <input 
-          name="email" 
-          placeholder="Email" 
-          onChange={handleChange} 
-          className="bg-black border-b-2 border-green-900 text-green-400 p-2 outline-none focus:border-green-500 transition-colors placeholder:text-green-900"
-        />
-        
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-          className="bg-black border-b-2 border-green-900 text-green-400 p-2 outline-none focus:border-green-500 transition-colors placeholder:text-green-900"
-        />
-        
-        <button 
-          type="submit"
-          className="mt-6 bg-green-600 text-black font-bold py-2 px-4 rounded hover:bg-green-400 hover:shadow-[0_0_20px_rgba(34,197,94,0.6)] transition-all duration-300"
+        {/* Animated border */}
+        <div className="absolute inset-0 animate-spin-slow">
+          <div className="w-full h-full bg-[conic-gradient(from_0deg,#45f3ff,transparent,#d9138a,#45f3ff)]" />
+        </div>
+
+        {/* Login form */}
+        <form
+          onSubmit={handleSubmit}
+          className="absolute inset-[3px] bg-[#28292d] rounded-[50px_5px] p-8 z-10 flex flex-col"
         >
-          ENTER THE PITCH
-        </button>
-      </form>
+          <h1 className="text-2xl font-semibold text-[#45f3ff] text-center mb-8">
+            Login
+          </h1>
+
+          <label className="text-[#9eb3b5] mb-1">Email</label>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter email"
+            onChange={handleChange}
+            required
+            className="mb-4 px-4 py-2 rounded-xl bg-white/20 text-white outline-none"
+          />
+
+          <label className="text-[#9eb3b5] mb-1">Password</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter password"
+            onChange={handleChange}
+            required
+            className="mb-6 px-4 py-2 rounded-xl bg-white/20 text-white outline-none"
+          />
+
+          <button
+            type="submit"
+            className="bg-[#45f3ff] text-black font-bold py-2 rounded-xl shadow-lg hover:scale-105 transition"
+          >
+            ENTER THE PITCH
+          </button>
+
+          <p className="text-sm text-cyan-400 mt-4 text-center cursor-pointer">
+            Forgot password?
+          </p>
+
+          <p className="text-sm text-cyan-400 mt-2 text-center cursor-pointer">
+            Don’t have an account? <span className="text-pink-500">Register</span>
+          </p>
+        </form>
+      </div>
     </div>
   );
 };

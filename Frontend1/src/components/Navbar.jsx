@@ -1,16 +1,10 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
-
-  // Hide navbar on splash page
-  if (location.pathname === "/") {
-    return null;
-  }
 
   const handleLogout = () => {
     localStorage.clear();
@@ -18,31 +12,73 @@ const Navbar = () => {
   };
 
   return (
-    <nav style={styles.nav}>
-      <h2 style={styles.logo}>🏏 Cricket App</h2>
+    <nav className="w-full bg-[#23242a] border-b border-[#45f3ff] px-6 py-3 flex justify-between items-center">
+      
+      {/* Logo */}
+      <h2 className="text-xl font-bold text-[#45f3ff] tracking-wide">
+        🏏 Cricket App
+      </h2>
 
-      <div style={styles.links}>
+      {/* Links */}
+      <div className="flex items-center gap-4">
         {!token && (
           <>
-            <Link to="/login" style={styles.link}>Login</Link>
-            <Link to="/register" style={styles.link}>Register</Link>
+            <Link
+              to="/login"
+              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
+            >
+              Login
+            </Link>
+            <Link
+              to="/register"
+              className="text-[#9eb3b5] hover:text-[#d9138a] transition"
+            >
+              Register
+            </Link>
           </>
         )}
 
         {token && (
           <>
             {role === "manager" && (
-              <Link to="/manager" style={styles.link}>Manager</Link>
+              <Link
+                to="/manager"
+                className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
+              >
+                Manager
+              </Link>
             )}
 
-            <Link to="/viewer" style={styles.link}>Viewer</Link>
-            <Link to="/players" style={styles.link}>Players</Link>
+            <Link
+              to="/viewer"
+              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
+            >
+              Viewer
+            </Link>
+
+            <Link
+              to="/players"
+              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
+            >
+              Players
+            </Link>
 
             {role === "manager" && (
-              <Link to="/players/add" style={styles.link}>Add Player</Link>
+              <Link
+                to="/players/add"
+                className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
+              >
+                Add Player
+              </Link>
             )}
 
-            <button onClick={handleLogout} style={styles.logout}>
+            <button
+              onClick={handleLogout}
+              className="ml-4 px-4 py-1.5 rounded-md
+                         bg-[#d9138a] text-white
+                         hover:bg-[#45f3ff] hover:text-black
+                         transition"
+            >
               Logout
             </button>
           </>
@@ -50,38 +86,6 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
-
-const styles = {
-  nav: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "12px 24px",
-    backgroundColor: "#0b132b",
-    color: "#fff",
-  },
-  logo: {
-    margin: 0,
-  },
-  links: {
-    display: "flex",
-    gap: "15px",
-    alignItems: "center",
-  },
-  link: {
-    color: "#fff",
-    textDecoration: "none",
-    fontWeight: "500",
-  },
-  logout: {
-    padding: "6px 12px",
-    border: "none",
-    backgroundColor: "#ff4d4d",
-    color: "#fff",
-    cursor: "pointer",
-    borderRadius: "4px",
-  },
 };
 
 export default Navbar;
