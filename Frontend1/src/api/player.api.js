@@ -1,13 +1,9 @@
-import api from "./axios";
+import api from "./api";
 
+export const getPlayers = () => api.get("/players");
 
+export const getPlayerById = (id) => api.get(`/players/${id}`);
 
-API.interceptors.request.use((req) => {
-  req.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
-  return req;
-});
+export const addPlayer = (data) => api.post("/players", data);
 
-export const getPlayers = () => API.get("/");
-
-// ✅ ADD THIS LINE
-export const getPlayerById = (id) => API.get(`/${id}`);
+export const deletePlayer = (id) => api.delete(`/players/${id}`);
