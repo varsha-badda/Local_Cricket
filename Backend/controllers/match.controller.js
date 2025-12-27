@@ -1,4 +1,4 @@
-const Match = require("../models/Match.model");
+const Match = require("../models/match.model");
 
 exports.scheduleMatch = async (req, res) => {
   const { teamA, teamB, ground, date, time } = req.body;
