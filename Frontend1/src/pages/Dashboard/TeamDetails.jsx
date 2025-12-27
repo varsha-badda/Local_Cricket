@@ -21,7 +21,7 @@ const TeamDetails = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="p-6">
         <h2 className="text-xl mb-3">{team.name}</h2>
 

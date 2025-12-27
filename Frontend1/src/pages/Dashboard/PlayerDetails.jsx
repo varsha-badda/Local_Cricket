@@ -15,7 +15,7 @@ const PlayerDetails = () => {
 
   return (
     <>
-      <Navbar />
+      
       <div className="p-6">
         <p><b>Name:</b> {player.name}</p>
         <p><b>Role:</b> {player.role}</p>

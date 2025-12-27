@@ -1,76 +1,63 @@
 import { useEffect, useState } from "react";
-import { getMatches, scheduleMatch } from "../../api/match.api";
-import { getTeams } from "../../api/team.api";
-import Navbar from "../../components/Navbar";
+import { getMatches } from "../../api/match.api";
+import { useNavigate } from "react-router-dom";
 
 const Matches = () => {
   const [matches, setMatches] = useState([]);
-  const [teams, setTeams] = useState([]);
-  const isManager = localStorage.getItem("role") === "manager";
-
-  const [form, setForm] = useState({
-    teamA: "",
-    teamB: "",
-    ground: "",
-    date: "",
-    time: "",
-  });
+  const role = localStorage.getItem("role");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    loadData();
+    getMatches().then(res => setMatches(res.data));
   }, []);
 
-  const loadData = async () => {
-    setMatches((await getMatches()).data);
-    setTeams((await getTeams()).data);
-  };
-
-  const handleSchedule = async () => {
-    await scheduleMatch(form);
-    loadData();
-  };
-
   return (
-    <>
-      <Navbar />
-      <div className="p-6">
-        <h2 className="text-xl mb-4">Matches</h2>
+    <div className="min-h-screen bg-[#020617] text-white px-10 py-8">
+      <h1 className="text-4xl font-bold text-cyan-400">Matches</h1>
 
-        {isManager && (
-          <div className="mb-6 space-y-2">
-            <select onChange={(e) => setForm({ ...form, teamA: e.target.value })}>
-              <option>Select Team A</option>
-              {teams.map((t) => (
-                <option key={t._id} value={t._id}>{t.name}</option>
-              ))}
-            </select>
+      {role === "manager" && (
+        <button
+          onClick={() => navigate("/matches/add")}
+          className="mt-6 mb-8 px-6 py-2 bg-cyan-500 text-black rounded-lg"
+        >
+          ➕ Schedule Match
+        </button>
+      )}
 
-            <select onChange={(e) => setForm({ ...form, teamB: e.target.value })}>
-              <option>Select Team B</option>
-              {teams.map((t) => (
-                <option key={t._id} value={t._id}>{t.name}</option>
-              ))}
-            </select>
+      <div className="grid gap-6 md:grid-cols-2">
+        {matches.map((m) => (
+          <div key={m._id} className="bg-[#020617] border border-cyan-500/20 rounded-xl p-6">
+            <h2 className="text-lg text-cyan-300 font-semibold">
+              {m.teamA.name} vs {m.teamB.name}
+            </h2>
 
-            <input type="date" onChange={(e) => setForm({ ...form, date: e.target.value })} />
-            <input type="time" onChange={(e) => setForm({ ...form, time: e.target.value })} />
-            <input placeholder="Ground ID" onChange={(e) => setForm({ ...form, ground: e.target.value })} />
+            <p className="text-gray-400">Ground: {m.ground.name}</p>
+            <p className="text-gray-400">Date: {m.date}</p>
 
-            <button onClick={handleSchedule} className="bg-green-500 p-2">
-              Schedule
-            </button>
+            <p
+              className={`mt-2 font-semibold ${
+                m.status === "scheduled"
+                  ? "text-yellow-400"
+                  : "text-green-400"
+              }`}
+            >
+              {m.status.toUpperCase()}
+            </p>
+
+            {role === "manager" && (
+              <div className="flex gap-3 mt-4">
+                <button className="px-4 py-1 bg-yellow-400 text-black rounded">
+                  Edit
+                </button>
+                <button className="px-4 py-1 bg-pink-600 text-white rounded">
+                  Delete
+                </button>
+              </div>
+            )}
           </div>
-        )}
-
-        <ul>
-          {matches.map((m) => (
-            <li key={m._id}>
-              {m.teamA?.name} vs {m.teamB?.name} | {m.ground?.name} | {m.date} {m.time}
-            </li>
-          ))}
-        </ul>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 

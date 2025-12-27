@@ -1,77 +1,67 @@
 import { useEffect, useState } from "react";
-import { getPlayers, addPlayer, deletePlayer } from "../../api/player.api";
+import { getPlayers } from "../../api/player.api";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
 
 const Players = () => {
   const [players, setPlayers] = useState([]);
-  const [name, setName] = useState("");
+  const role = localStorage.getItem("role");
   const navigate = useNavigate();
-  const isManager = localStorage.getItem("role") === "manager";
 
   useEffect(() => {
-    loadPlayers();
+    fetchPlayers();
   }, []);
 
-  const loadPlayers = async () => {
+  const fetchPlayers = async () => {
     const res = await getPlayers();
     setPlayers(res.data);
   };
 
-  const handleAdd = async () => {
-    await addPlayer({ name });
-    setName("");
-    loadPlayers();
-  };
-
-  const handleDelete = async (id) => {
-    await deletePlayer(id);
-    loadPlayers();
-  };
-
   return (
-    <>
-      <Navbar />
-      <div className="p-6">
-        <h2 className="text-xl mb-4">Players</h2>
+    <div className="min-h-screen bg-[#020617] text-white px-10 py-8">
+      <h1 className="text-4xl font-bold text-cyan-400">Players</h1>
+      <p className="text-gray-400 mt-2">
+        Welcome {role === "manager" ? "Manager" : "Viewer"}
+      </p>
 
-        {isManager && (
-          <div className="mb-4">
-            <input
-              className="text-black p-2"
-              placeholder="Player name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <button onClick={handleAdd} className="ml-2 bg-green-500 p-2">
-              Add
-            </button>
-          </div>
-        )}
+      {role === "manager" && (
+        <button
+          onClick={() => navigate("/players/add")}
+          className="mt-6 mb-8 px-6 py-2 bg-cyan-500 text-black rounded-lg"
+        >
+          ➕ Add Player
+        </button>
+      )}
 
-        <ul>
-          {players.map((p) => (
-            <li key={p._id} className="flex justify-between">
-              <span
-                className="cursor-pointer"
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {players.map((p) => (
+          <div key={p._id} className="bg-[#020617] border border-cyan-500/20 rounded-xl p-5">
+            <h2 className="text-xl text-cyan-300 font-semibold">{p.name}</h2>
+            <p className="text-gray-400">Role: {p.role}</p>
+            <p className="text-gray-400">Team: {p.team?.name}</p>
+
+            <div className="mt-4 flex gap-3">
+              <button
                 onClick={() => navigate(`/players/${p._id}`)}
+                className="px-4 py-1 bg-cyan-500 text-black rounded"
               >
-                {p.name}
-              </span>
+                View
+              </button>
 
-              {isManager && (
-                <button
-                  onClick={() => handleDelete(p._id)}
-                  className="text-red-400"
-                >
-                  Delete
-                </button>
+              {role === "manager" && (
+                <>
+                  <button className="px-4 py-1 bg-yellow-400 text-black rounded">
+                    Edit
+                  </button>
+                  <button className="px-4 py-1 bg-pink-600 text-white rounded">
+                    Delete
+                  </button>
+                </>
               )}
-            </li>
-          ))}
-        </ul>
+            </div>
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 };
 

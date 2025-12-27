@@ -8,14 +8,16 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.clear();
-    navigate("/login");
+    navigate("/"); // ✅ login route
   };
 
   return (
     <nav className="w-full bg-[#23242a] border-b border-[#45f3ff] px-6 py-3 flex justify-between items-center">
       
       {/* Logo */}
-      <h2 className="text-xl font-bold text-[#45f3ff] tracking-wide">
+      <h2 className="text-xl font-bold text-[#45f3ff] tracking-wide cursor-pointer"
+          onClick={() => navigate(token ? "/viewer" : "/")}
+      >
         🏏 Cricket App
       </h2>
 
@@ -24,7 +26,7 @@ const Navbar = () => {
         {!token && (
           <>
             <Link
-              to="/login"
+              to="/"
               className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
             >
               Login
@@ -40,20 +42,14 @@ const Navbar = () => {
 
         {token && (
           <>
-            {role === "manager" && (
-              <Link
-                to="/manager"
-                className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
-              >
-                Manager
-              </Link>
-            )}
+            
 
+            {/* Common pages */}
             <Link
-              to="/viewer"
+              to="/teams"
               className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
             >
-              Viewer
+              Teams
             </Link>
 
             <Link
@@ -63,15 +59,28 @@ const Navbar = () => {
               Players
             </Link>
 
+            <Link
+              to="/grounds"
+              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
+            >
+              Grounds
+            </Link>
+
+            <Link
+              to="/matches"
+              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
+            >
+              Matches
+            </Link>
+
+            {/* Manager badge (optional, visual only) */}
             {role === "manager" && (
-              <Link
-                to="/players/add"
-                className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
-              >
-                Add Player
-              </Link>
+              <span className="ml-2 px-2 py-1 text-xs rounded bg-[#45f3ff] text-black">
+                Manager
+              </span>
             )}
 
+            {/* Logout */}
             <button
               onClick={handleLogout}
               className="ml-4 px-4 py-1.5 rounded-md
