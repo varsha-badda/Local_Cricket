@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { getPlayerById } from "../../api/player.api";
 import Navbar from "../../components/Navbar";
 
-export default function PlayerDetails() {
+const PlayerDetails = () => {
   const { id } = useParams();
   const [player, setPlayer] = useState(null);
 
   useEffect(() => {
-    getPlayerById(id).then(res => setPlayer(res.data));
-  }, []);
+    getPlayerById(id).then((res) => setPlayer(res.data));
+  }, [id]);
 
   if (!player) return null;
 
@@ -17,12 +17,14 @@ export default function PlayerDetails() {
     <>
       <Navbar />
       <div className="p-6">
-        <p>Name: {player.name}</p>
-        <p>Role: {player.role}</p>
-        <p>Age: {player.age}</p>
-        <p>Runs: {player.runs}</p>
-        <p>Wickets: {player.wickets}</p>
+        <p><b>Name:</b> {player.name}</p>
+        <p><b>Role:</b> {player.role}</p>
+        <p><b>Age:</b> {player.age}</p>
+        <p><b>Runs:</b> {player.runs}</p>
+        <p><b>Wickets:</b> {player.wickets}</p>
       </div>
     </>
   );
-}
+};
+
+export default PlayerDetails;
