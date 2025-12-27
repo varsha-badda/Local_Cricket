@@ -1,24 +1,18 @@
-import { useEffect, useState } from "react";
-import { getGrounds } from "../../api/ground.api";
-import Navbar from "../../components/Navbar";
+const isManager = localStorage.getItem("role") === "manager";
 
-export default function Grounds() {
-  const [grounds, setGrounds] = useState([]);
+{isManager && (
+  <div>
+    <input placeholder="Ground name" />
+    <input placeholder="Location" />
+    <button onClick={addGround}>Add Ground</button>
+  </div>
+)}
 
-  useEffect(() => {
-    getGrounds().then(res => setGrounds(res.data));
-  }, []);
-
-  return (
-    <>
-      <Navbar />
-      <ul className="p-6">
-        {grounds.map(g => (
-          <li key={g._id}>
-            {g.name} - {g.isBooked ? "Booked ❌" : "Available ✅"}
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
+{grounds.map(g => (
+  <li key={g._id}>
+    {g.name} - {g.isBooked ? "Booked ❌" : "Available ✅"}
+    {isManager && (
+      <button onClick={() => deleteGround(g._id)}>Delete</button>
+    )}
+  </li>
+))}

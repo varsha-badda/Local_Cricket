@@ -1,26 +1,19 @@
-import { useEffect, useState } from "react";
-import { getPlayers } from "../../api/player.api";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+const isManager = localStorage.getItem("role") === "manager";
 
-export default function Players() {
-  const [players, setPlayers] = useState([]);
-  const navigate = useNavigate();
+{isManager && (
+  <div>
+    <input placeholder="Name" />
+    <input placeholder="Role" />
+    <input placeholder="Age" />
+    <button onClick={addPlayer}>Add Player</button>
+  </div>
+)}
 
-  useEffect(() => {
-    getPlayers().then(res => setPlayers(res.data));
-  }, []);
-
-  return (
-    <>
-      <Navbar />
-      <ul className="p-6">
-        {players.map(p => (
-          <li key={p._id} onClick={() => navigate(`/players/${p._id}`)}>
-            {p.name}
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
+{players.map(p => (
+  <li key={p._id}>
+    {p.name}
+    {isManager && (
+      <button onClick={() => deletePlayer(p._id)}>Delete</button>
+    )}
+  </li>
+))}
