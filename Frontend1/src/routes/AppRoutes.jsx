@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "../pages/Auth/Login";
-import Register from "../pages/Auth/Register";
+import Login from "../features/Auth/Login";
+import Register from "../features/Auth/Register";
 import AddTeam from "../pages/Dashboard/AddTeam";
 import Teams from "../pages/Dashboard/Teams";
 import Players from "../pages/Dashboard/Players";
