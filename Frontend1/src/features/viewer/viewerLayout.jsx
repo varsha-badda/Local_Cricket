@@ -3,12 +3,12 @@ import Navbar from "../../components/Navbar";
 
 const ViewerLayout = () => {
   return (
-    <>
+    <div className="min-h-screen bg-black text-white">
       <Navbar />
-      <div className="p-4">
+      <div className="p-6">
         <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 

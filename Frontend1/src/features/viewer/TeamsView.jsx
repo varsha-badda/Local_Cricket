@@ -1,7 +1,7 @@
 // src/features/viewer/teams/TeamsView.jsx
 
 import { useEffect, useState } from "react";
-import { getTeams } from "../../../api/api";
+import { getTeams } from "../../api/api";
 
 const TeamsView = () => {
   const [teams, setTeams] = useState([]);
