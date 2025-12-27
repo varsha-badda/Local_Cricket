@@ -3,6 +3,9 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/auth.routes");
 const playerRoutes = require("./routes/player.routes");
+const matchRoutes = require("./routes/match.routes");
+
+app.use("/api/matches", matchRoutes);
 
 const app = express();
 
