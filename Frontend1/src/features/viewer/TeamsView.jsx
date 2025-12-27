@@ -1,26 +1,40 @@
 import { useEffect, useState } from "react";
 import { getTeams } from "../../api/api";
 
-const TeamsView = () => {
+
+const TeamView = () => {
   const [teams, setTeams] = useState([]);
 
   useEffect(() => {
-    getTeams().then((res) => setTeams(res.data));
+    fetchTeams();
   }, []);
+
+  const fetchTeams = async () => {
+    const res = await getTeams();
+    setTeams(res.data);
+  };
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-cyan-400 mb-4">Teams</h1>
+      <h1 className="text-2xl text-cyan-400 mb-6">Teams</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid gap-4">
         {teams.map((team) => (
           <div
             key={team._id}
-            className="bg-zinc-900 p-4 rounded-lg border border-zinc-700 hover:border-pink-500"
+            className="bg-zinc-900 p-4 rounded border border-zinc-700"
           >
-            <h2 className="text-lg font-semibold">{team.name}</h2>
-            <p className="text-gray-400 text-sm">
-              Players: {team.players?.length || 0}
+            <h2 className="text-lg text-white">{team.name}</h2>
+
+            <p className="text-gray-400">
+              Score:{" "}
+              <span className="text-cyan-400">
+                {team.score ?? 0}
+              </span>
+            </p>
+
+            <p className="text-gray-400">
+              Players: {team.playerCount ?? 0}
             </p>
           </div>
         ))}
@@ -29,4 +43,4 @@ const TeamsView = () => {
   );
 };
 
-export default TeamsView;
+export default TeamView;

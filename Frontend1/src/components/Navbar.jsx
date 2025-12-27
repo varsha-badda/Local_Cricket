@@ -1,97 +1,63 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
+  // ❌ Do NOT show navbar on auth pages
+  if (
+    location.pathname === "/login" ||
+    location.pathname === "/register"
+  ) {
+    return null;
+  }
+
+  // ❌ Do not render if role is missing
+  if (!role) return null;
+
+  const basePath = role === "manager" ? "/manager" : "/viewer";
+
   const handleLogout = () => {
-    localStorage.clear();
-    navigate("/"); // ✅ login route
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/login");
   };
 
   return (
-    <nav className="w-full bg-[#23242a] border-b border-[#45f3ff] px-6 py-3 flex justify-between items-center">
-      
-      {/* Logo */}
-      <h2 className="text-xl font-bold text-[#45f3ff] tracking-wide cursor-pointer"
-          onClick={() => navigate(token ? "/viewer" : "/")}
-      >
+    <nav className="flex justify-between items-center px-6 py-3 bg-[#1f2025] text-white">
+      <h1 className="text-xl font-bold text-cyan-400">
         🏏 Cricket App
-      </h2>
+      </h1>
 
-      {/* Links */}
-      <div className="flex items-center gap-4">
-        {!token && (
-          <>
-            <Link
-              to="/"
-              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
-            >
-              Login
-            </Link>
-            <Link
-              to="/register"
-              className="text-[#9eb3b5] hover:text-[#d9138a] transition"
-            >
-              Register
-            </Link>
-          </>
-        )}
+      <div className="flex gap-6">
+        <Link to={`${basePath}/teams`} className="hover:text-cyan-400">
+          Teams
+        </Link>
 
-        {token && (
-          <>
-            
+        <Link to={`${basePath}/players`} className="hover:text-cyan-400">
+          Players
+        </Link>
 
-            {/* Common pages */}
-            <Link
-              to="/teams"
-              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
-            >
-              Teams
-            </Link>
+      
 
-            <Link
-              to="/players"
-              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
-            >
-              Players
-            </Link>
+        <Link to={`${basePath}/matches`} className="hover:text-cyan-400">
+          Matches
+        </Link>
+      </div>
 
-            <Link
-              to="/grounds"
-              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
-            >
-              Grounds
-            </Link>
+      <div className="flex gap-4 items-center">
+        <span className="px-3 py-1 bg-cyan-500 text-black rounded capitalize">
+          {role}
+        </span>
 
-            <Link
-              to="/matches"
-              className="text-[#9eb3b5] hover:text-[#45f3ff] transition"
-            >
-              Matches
-            </Link>
-
-            {/* Manager badge (optional, visual only) */}
-            {role === "manager" && (
-              <span className="ml-2 px-2 py-1 text-xs rounded bg-[#45f3ff] text-black">
-                Manager
-              </span>
-            )}
-
-            {/* Logout */}
-            <button
-              onClick={handleLogout}
-              className="ml-4 px-4 py-1.5 rounded-md
-                         bg-[#d9138a] text-white
-                         hover:bg-[#45f3ff] hover:text-black
-                         transition"
-            >
-              Logout
-            </button>
-          </>
-        )}
+        <button
+          onClick={handleLogout}
+          className="px-4 py-1 bg-pink-500 rounded"
+        >
+          Logout
+        </button>
       </div>
     </nav>
   );

@@ -63,4 +63,4 @@ const PlayerList = () => {
   );
 };
 
-export default Player
+export default PlayerList;
