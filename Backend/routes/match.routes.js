@@ -1,11 +1,7 @@
 const express = require("express");
-const {
-  scheduleMatch,
-  getMatches,
-} = require("../controllers/match.controller");
-
+const { scheduleMatch, getMatches } = require("../controllers/match.controller");
 const auth = require("../middleware/auth.middleware");
-const role = require("../middleware/role.middleware");
+const role = require("../middleware/role.middleware"); // ✅ NOT destructured
 
 const router = express.Router();
 

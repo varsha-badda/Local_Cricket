@@ -1,26 +1,28 @@
 const express = require("express");
 const cors = require("cors");
 
+// ✅ IMPORT ROUTES FIRST
 const authRoutes = require("./routes/auth.routes");
 const playerRoutes = require("./routes/player.routes");
+const teamRoutes = require("./routes/team.routes");
 const matchRoutes = require("./routes/match.routes");
 
-app.use("/api/matches", matchRoutes);
-
+// ✅ THEN CREATE APP
 const app = express();
 
-// ✅ THIS LINE WAS MISSING (MOST IMPORTANT)
-app.use(cors({
-  origin: "http://localhost:5173"
-}));
-
+// ✅ MIDDLEWARES
+app.use(cors());
 app.use(express.json());
 
+// ✅ ROUTES (AFTER app IS CREATED)
 app.use("/api/auth", authRoutes);
 app.use("/api/players", playerRoutes);
+app.use("/api/teams", teamRoutes);
+app.use("/api/matches", matchRoutes);
 
+// ✅ TEST ROUTE (OPTIONAL)
 app.get("/", (req, res) => {
-  res.send("Backend Running");
+  res.send("Cricket Backend Running");
 });
 
 module.exports = app;

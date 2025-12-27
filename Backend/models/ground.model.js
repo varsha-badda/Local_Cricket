@@ -5,4 +5,6 @@ const groundSchema = new mongoose.Schema({
   location: String,
 });
 
-module.exports = mongoose.model("Ground", groundSchema);
+module.exports =
+  mongoose.models.Ground || mongoose.model("Ground", groundSchema);
+
