@@ -8,7 +8,7 @@ const playerSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["batsman", "bowler", "all-rounder", "wicketkeeper","captain"],
+      enum: ["Batsman", "Bowler", "All-rounder", "Wicketkeeper","captain"],
       required: true
     },
     team: {

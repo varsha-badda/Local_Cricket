@@ -1,39 +1,97 @@
 const Team = require("../models/team.model");
+const Player = require("../models/player.model");
 
+/* =========================
+   GET ALL TEAMS + PLAYER COUNT
+   ========================= */
 exports.getTeams = async (req, res) => {
-  const teams = await Team.find();
-  res.json(teams);
+  try {
+    const teams = await Team.find();
+
+    const teamsWithCounts = await Promise.all(
+      teams.map(async (team) => {
+        const playerCount = await Player.countDocuments({
+          team: team._id,
+        });
+
+        return {
+          ...team.toObject(),
+          playerCount,
+        };
+      })
+    );
+
+    res.json(teamsWithCounts);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
+/* =========================
+   ADD TEAM
+   ========================= */
 exports.addTeam = async (req, res) => {
-  const { name, score } = req.body;
+  try {
+    const { name, score } = req.body;
 
-  const team = await Team.create({
-    name,
-    score: score || 0,
-  });
+    const team = await Team.create({
+      name,
+      score: score || 0,
+    });
 
-  res.json(team);
+    res.status(201).json(team);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
+/* =========================
+   GET TEAM BY ID (WITH PLAYERS)
+   ========================= */
 exports.getTeamById = async (req, res) => {
-  const team = await Team.findById(req.params.id).populate("players");
-  res.json(team);
+  try {
+    const team = await Team.findById(req.params.id);
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+
+    const players = await Player.find({ team: team._id });
+
+    res.json({
+      ...team.toObject(),
+      players, // ✅ computed, not populated
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
+/* =========================
+   UPDATE TEAM SCORE
+   ========================= */
 exports.updateScore = async (req, res) => {
-  const { score } = req.body;
+  try {
+    const { score } = req.body;
 
-  const team = await Team.findByIdAndUpdate(
-    req.params.id,
-    { score },
-    { new: true }
-  );
+    const team = await Team.findByIdAndUpdate(
+      req.params.id,
+      { score },
+      { new: true }
+    );
 
-  res.json(team);
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+
+    res.json(team);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
 };
 
-// ✅ THIS WAS MISSING
+/* =========================
+   DELETE TEAM
+   ========================= */
 exports.deleteTeam = async (req, res) => {
   try {
     const { id } = req.params;

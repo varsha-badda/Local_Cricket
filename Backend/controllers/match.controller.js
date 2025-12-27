@@ -1,34 +1,54 @@
-const Match = require("../models/match.model");
+const Match = require("../models/Match.model");
 
-exports.scheduleMatch = async (req, res) => {
-  const { teamA, teamB, ground, date, time } = req.body;
+// POST /api/matches/schedule
+const scheduleMatch = async (req, res) => {
+  try {
+    const { teamA, teamB, date } = req.body;
 
-  // 🚨 Check ground vacancy
-  const existingMatch = await Match.findOne({
-    ground,
-    date,
-    time,
-  });
+    const match = await Match.create({
+      teamA,
+      teamB,
+      date,
+    });
 
-  if (existingMatch) {
-    return res
-      .status(400)
-      .json({ message: "Ground not available at this time" });
+    res.status(201).json(match);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to schedule match" });
+  }
+};
+
+// GET /api/matches
+const getMatches = async (req, res) => {
+  try {
+    const matches = await Match.find()
+      .populate("teamA", "name")
+      .populate("teamB", "name");
+
+    res.json(matches);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch matches" });
   }
 
-  const match = await Match.create({
-    teamA,
-    teamB,
-    ground,
-    date,
-    time,
-  });
-
-  res.json(match);
 };
 
-exports.getMatches = async (req, res) => {
-  const matches = await Match.find()
-    .populate("teamA teamB ground");
-  res.json(matches);
+// DELETE /api/matches/:id
+const deleteMatch = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await Match.findByIdAndDelete(id);
+
+    res.json({ message: "Match deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete match" });
+  }
 };
+
+
+module.exports = {
+  scheduleMatch,
+  getMatches,
+  deleteMatch,
+};
+

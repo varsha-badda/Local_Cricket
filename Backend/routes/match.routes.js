@@ -1,11 +1,14 @@
 const express = require("express");
-const { scheduleMatch, getMatches } = require("../controllers/match.controller");
-const auth = require("../middleware/auth.middleware");
-const role = require("../middleware/role.middleware"); // ✅ NOT destructured
-
 const router = express.Router();
 
-router.get("/", auth, getMatches);
-router.post("/", auth, role("manager"), scheduleMatch);
+const {
+  scheduleMatch,
+  getMatches,
+  deleteMatch,
+} = require("../controllers/match.controller");
+
+router.post("/schedule", scheduleMatch);
+router.get("/", getMatches);
+router.delete("/:id", deleteMatch);
 
 module.exports = router;

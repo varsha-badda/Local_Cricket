@@ -8,6 +8,10 @@ const teamSchema = new mongoose.Schema({
       ref: "Player",
     },
   ],
+  score: {
+    type: Number,
+    default: 0,   // ✅ VERY IMPORTANT
+  },
 });
 
 
