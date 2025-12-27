@@ -1,48 +1,23 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import ProtectedRoute from "../components/ProtectedRoute.jsx";
+import { Routes, Route } from "react-router-dom";
+import ViewerDashboard from "../pages/Dashboard/ViewerDashboard";
+import Teams from "../pages/Dashboard/Teams";
+import TeamDetails from "../pages/Dashboard/TeamDetails";
+import Players from "../pages/Dashboard/Players";
+import PlayerDetails from "../pages/Dashboard/PlayerDetails";
+import Grounds from "../pages/Dashboard/Grounds";
+import Matches from "../pages/Dashboard/Matches";
+import ProtectedRoute from "../components/ProtectedRoute";
 
-import Splash from "../pages/Splash.jsx";
-import Login from "../pages/Auth/Login.jsx";
-import Register from "../pages/Auth/Register.jsx";
-import ManagerDashboard from "../pages/Dashboard/ManagerDashboard.jsx";
-import ViewerDashboard from "../pages/Dashboard/ViewerDashboard.jsx";
-
-
-const AppRoutes = () => {
+export default function AppRoutes() {
   return (
     <Routes>
-      {/* Splash */}
-      <Route path="/" element={<Splash />} />
-
-      {/* Auth */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-
-      {/* Dashboards */}
-      <Route
-        path="/manager"
-        element={
-          <ProtectedRoute allowedRoles={["manager"]}>
-            <ManagerDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/viewer"
-        element={
-          <ProtectedRoute allowedRoles={["viewer", "manager"]}>
-            <ViewerDashboard />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route path="/register" element={<Register />} />
-
-
-      
+      <Route path="/viewer" element={<ProtectedRoute><ViewerDashboard /></ProtectedRoute>} />
+      <Route path="/teams" element={<ProtectedRoute><Teams /></ProtectedRoute>} />
+      <Route path="/teams/:id" element={<ProtectedRoute><TeamDetails /></ProtectedRoute>} />
+      <Route path="/players" element={<ProtectedRoute><Players /></ProtectedRoute>} />
+      <Route path="/players/:id" element={<ProtectedRoute><PlayerDetails /></ProtectedRoute>} />
+      <Route path="/grounds" element={<ProtectedRoute><Grounds /></ProtectedRoute>} />
+      <Route path="/matches" element={<ProtectedRoute><Matches /></ProtectedRoute>} />
     </Routes>
   );
-};
-
-export default AppRoutes;
+}
