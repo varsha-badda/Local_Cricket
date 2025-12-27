@@ -6,6 +6,7 @@ const authRoutes = require("./routes/auth.routes");
 const playerRoutes = require("./routes/player.routes");
 const teamRoutes = require("./routes/team.routes");
 const matchRoutes = require("./routes/match.routes");
+const groundRoutes = require("./routes/ground.routes");
 
 // ✅ THEN CREATE APP
 const app = express();
@@ -19,6 +20,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/teams", teamRoutes);
 app.use("/api/matches", matchRoutes);
+app.use("/api/grounds", groundRoutes);
 
 // ✅ TEST ROUTE (OPTIONAL)
 app.get("/", (req, res) => {

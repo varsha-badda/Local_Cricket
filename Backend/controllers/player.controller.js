@@ -1,21 +1,25 @@
 const Player = require("../models/player.model");
 
-/* ===== GET ALL PLAYERS ===== */
-exports.getAllPlayers = async (req, res) => {
-  try {
-    const players = await Player.find(); // DB call
-    res.json(players);                   // send data
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
+exports.getPlayers = async (req, res) => {
+  const players = await Player.find();
+  res.json(players);
 };
 
-/* ===== CREATE PLAYER ===== */
-exports.createPlayer = async (req, res) => {
-  try {
-    const player = await Player.create(req.body); // save to DB
-    res.status(201).json(player);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+exports.getPlayerById = async (req, res) => {
+  const player = await Player.findById(req.params.id);
+
+  if (!player) {
+    return res.status(404).json({ message: "Player not found" });
   }
+
+  res.json(player);
+};
+
+exports.addPlayer = async (req, res) => {
+  const player = await Player.create(req.body);
+  res.json(player);
+};
+exports.deletePlayer = async (req, res) => {
+  await Player.findByIdAndDelete(req.params.id);
+  res.json({ message: "Player deleted" });
 };

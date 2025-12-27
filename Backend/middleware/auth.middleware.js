@@ -1,29 +1,27 @@
 const jwt = require("jsonwebtoken");
-const User = require("../models/User.model");
+const generateToken = require("../utils/generateToken");
 
-const protect = async (req, res, next) => {
-  let token;
+module.exports = (req, res, next) => {
+  console.log("👉 AUTH MIDDLEWARE HIT");
 
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
-      token = req.headers.authorization.split(" ")[1];
+  const authHeader = req.headers.authorization;
+  console.log("👉 AUTH HEADER:", authHeader);
 
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      req.user = await User.findById(decoded.id).select("-password");
-
-      next();
-    } catch (error) {
-      return res.status(401).json({ message: "Not authorized" });
-    }
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    console.log("❌ NO TOKEN");
+    return res.status(401).json({ message: "No token provided" });
   }
 
-  if (!token) {
-    return res.status(401).json({ message: "No token, authorization denied" });
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("✅ DECODED TOKEN:", decoded);
+
+    req.user = decoded;
+    next();
+  } catch (error) {
+    console.log("❌ TOKEN INVALID");
+    return res.status(401).json({ message: "Invalid token" });
   }
 };
-
-module.exports = protect;

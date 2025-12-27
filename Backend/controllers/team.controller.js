@@ -16,6 +16,11 @@ exports.addTeam = async (req, res) => {
   res.json(team);
 };
 
+exports.getTeamById = async (req, res) => {
+  const team = await Team.findById(req.params.id).populate("players");
+  res.json(team);
+};
+
 exports.updateScore = async (req, res) => {
   const { score } = req.body;
 
@@ -26,4 +31,22 @@ exports.updateScore = async (req, res) => {
   );
 
   res.json(team);
+};
+
+// ✅ THIS WAS MISSING
+exports.deleteTeam = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const team = await Team.findById(id);
+    if (!team) {
+      return res.status(404).json({ message: "Team not found" });
+    }
+
+    await team.deleteOne();
+
+    res.status(200).json({ message: "Team deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

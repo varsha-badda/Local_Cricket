@@ -6,36 +6,35 @@ const generateToken = require("../utils/generateToken");
 // Public registration → ALWAYS viewer
 exports.register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password, role } = req.body;
 
-    // 1. Validate input
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
     }
 
-    // 2. Check if user already exists
+    // Check existing user
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    // 3. Hash password
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 4. Create user (force role = viewer)
+    // Create user (role comes from frontend OR default)
     await User.create({
-      name,
       email,
       password: hashedPassword,
-      role: "viewer",
+      role: role || "viewer",
     });
 
-    // 5. Response
     res.status(201).json({
       message: "User registered successfully",
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("REGISTER ERROR:", error);
+    res.status(500).json({ message: "Registration failed" });
   }
 };
 
@@ -63,12 +62,10 @@ exports.login = async (req, res) => {
 
     // 4. Send token + role
     res.status(200).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role, // 👈 manager / viewer
-      token: generateToken(user._id),
-    });
+  _id: user._id,
+  role: user.role,
+  token: generateToken(user._id,user.role),
+});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
