@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 
-export default function ViewerDashboard() {
+const ViewerDashboard = () => {
   const navigate = useNavigate();
 
   return (
@@ -15,4 +15,6 @@ export default function ViewerDashboard() {
       </div>
     </>
   );
-}
+};
+
+export default ViewerDashboard;
