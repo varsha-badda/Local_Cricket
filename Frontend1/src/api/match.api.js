@@ -1,13 +1,7 @@
-import axios from "axios";
+import api from "./api";
 
-const API = axios.create({
-  baseURL: "http://localhost:5000/api/matches",
-});
+export const getMatches = () => api.get("/matches");
 
-API.interceptors.request.use((req) => {
-  req.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
-  return req;
-});
+export const scheduleMatch = (data) => api.post("/matches", data);
 
-export const getMatches = () => API.get("/");
-export const scheduleMatch = (data) => API.post("/", data);
+export const deleteMatch = (id) => api.delete(`/matches/${id}`);

@@ -1,10 +1,7 @@
-import axios from "axios";
+import api from "./api";
 
-const API = axios.create({ baseURL: "http://localhost:5000/api/grounds" });
+export const getGrounds = () => api.get("/grounds");
 
-API.interceptors.request.use((req) => {
-  req.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
-  return req;
-});
+export const addGround = (data) => api.post("/grounds", data);
 
-export const getGrounds = () => API.get("/");
+export const deleteGround = (id) => api.delete(`/grounds/${id}`);

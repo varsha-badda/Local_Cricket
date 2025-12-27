@@ -1,14 +1,12 @@
-import axios from "axios";
+import api from "./api";
 
+export const getTeams = () => api.get("/teams");
 
-API.interceptors.request.use((req) => {
-  req.headers.Authorization = `Bearer ${localStorage.getItem("token")}`;
-  return req;
-});
+export const getTeamById = (id) => api.get(`/teams/${id}`);
 
-export const getTeams = () => API.get("/");
-export const addTeam = (data) => API.post("/", data);
+export const addTeam = (data) => api.post("/teams", data);
 
-// 👇 NEW
+export const deleteTeam = (id) => api.delete(`/teams/${id}`);
+
 export const updateTeamScore = (id, score) =>
-  API.put(`/${id}/score`, { score });
+  api.put(`/teams/${id}/score`, { score });
