@@ -14,7 +14,7 @@ const app = express();
 // ✅ MIDDLEWARES
 app.use(
   cors({
-    origin: "http://localhost:5173", // frontend port (vite)
+    origin: "http://localhost:5174", // frontend port (vite)
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],

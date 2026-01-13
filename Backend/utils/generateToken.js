@@ -4,7 +4,7 @@ const generateToken = (id, role) => {
   return jwt.sign(
     {
       id,
-      role,   // 🔥 THIS WAS MISSING
+      role,   
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" }
