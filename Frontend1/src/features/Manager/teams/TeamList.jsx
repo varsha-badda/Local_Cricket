@@ -5,6 +5,9 @@ import {
   updateTeamScore,
   deleteTeam,      // ✅ ADD THIS
 } from "../../../api/api";
+import teamsIcon from "../../../assets/partners.png";
+
+
 
 const TeamList = () => {
   const [teams, setTeams] = useState([]);
@@ -49,7 +52,15 @@ const TeamList = () => {
 
   return (
     <div>
-      <h1 className="text-2xl text-cyan-400 mb-6">Teams</h1>
+     <h1 className="text-2xl text-cyan-400 mb-6 flex items-center gap-2">
+  <img
+    src={teamsIcon}
+    alt="Teams"
+    className="w-6 h-6"
+  />
+  Teams
+</h1>
+
 
       {/* ADD TEAM BUTTON */}
       {role === "manager" && (
@@ -72,9 +83,22 @@ const TeamList = () => {
             >
               {/* LEFT */}
               <div>
-                <h2 className="text-lg font-semibold text-white">
-                  {team.name}
-                </h2>
+                <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+  {team.name}
+
+  {/* STATUS BADGE */}
+  <span
+    className={`text-xs font-semibold px-2 py-1 rounded-full
+      ${
+        (team.score ?? 0) >= 100
+          ? "bg-green-500/20 text-green-400"
+          : "bg-red-500/20 text-red-400"
+      }`}
+  >
+    {(team.score ?? 0) >= 100 ? "🟢 High" : "🔴 Low"}
+  </span>
+</h2>
+
 
                 <p className="text-gray-400">
                   Score:{" "}

@@ -71,14 +71,14 @@ const Register = () => {
 
           {/* Role */}
           <label className="text-[#9eb3b5] mb-1">Role</label>
-          <select
+          <select 
             name="role"
             value={form.role}
             onChange={handleChange}
             className="mb-6 px-4 py-2 rounded-xl bg-white/20 text-white outline-none"
           >
             <option value="viewer">Viewer</option>
-            <option value="manager">Manager</option>
+            <option  value="manager">Manager</option>
           </select>
 
           {/* Submit */}

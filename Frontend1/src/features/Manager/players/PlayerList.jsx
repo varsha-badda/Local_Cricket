@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPlayers, deletePlayer } from "../../../api/api";
+import Playericon from "../../../assets/cricket.png";
 
 const PlayerList = () => {
   const [players, setPlayers] = useState([]);
@@ -24,7 +25,10 @@ const PlayerList = () => {
 
   return (
     <div>
-      <h1 className="text-2xl text-cyan-400 mb-4">Players</h1>
+       <h1 className="text-2xl text-cyan-400 mb-6 flex items-center gap-2"> <img
+    src={Playericon}
+    alt="Teams"
+    className="w-7 h-8"/>Players</h1>
 
       <button
         className="mb-4 px-4 py-2 bg-pink-500 rounded"

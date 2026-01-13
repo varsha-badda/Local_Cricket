@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getMatches, deleteMatch } from "../../../api/api";
+import ground from "../../../assets/cricket-ground.png";
 
 const MatchList = () => {
   const [matches, setMatches] = useState([]);
@@ -23,7 +24,7 @@ const MatchList = () => {
 
   return (
     <div>
-      <h2 className="text-xl text-cyan-400 mb-4">Scheduled Matches</h2>
+      <h2 className="text-xl text-cyan-400 mb-4"><img/>Scheduled Matches</h2>
 
       {matches.length === 0 ? (
         <p className="text-gray-400">No matches scheduled yet.</p>
